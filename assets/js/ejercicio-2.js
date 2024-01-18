@@ -1,26 +1,22 @@
-// JS desafio 2
-
 const inputs = document.querySelectorAll("input");
 const totalStickers = document.querySelector("#total-stickers");
 const mensaje = document.createElement("p");
 const verificar = document.querySelector("#verificar");
-
 let stock = 10;
 
-inputs.forEach((input) => {
-  input.addEventListener("input", () => {
-    input.value = isNaN(input.value) ? "" : input.value;
-  });
-});
-
-verificar.addEventListener("click", () => {
+const verificarNumero = () => {
   let total = 0;
-  let inputLimpios;
+  let inputLimpios = false;
+  let entradaInvalida = false;
 
   inputs.forEach((input) => {
+    const valor = Number(input.value);
     if (input.value) {
       inputLimpios = true;
-      const valor = Number(input.value);
+    }
+    if (isNaN(valor)) {
+      entradaInvalida = true;
+    } else {
       total += valor;
     }
   });
@@ -31,7 +27,10 @@ verificar.addEventListener("click", () => {
     "mensaje-error"
   );
 
-  if (!inputLimpios) {
+  if (entradaInvalida) {
+    mensaje.innerHTML = `No has ingresado un número válido`;
+    mensaje.classList.add("mensaje-warning");
+  } else if (!inputLimpios) {
     mensaje.innerHTML = `No has ingresado stickers`;
     mensaje.classList.add("mensaje-warning");
   } else if (total < 5) {
@@ -46,4 +45,6 @@ verificar.addEventListener("click", () => {
   }
 
   totalStickers.parentNode.appendChild(mensaje);
-});
+};
+
+verificar.addEventListener("click", verificarNumero);
